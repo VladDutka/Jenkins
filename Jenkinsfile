@@ -17,6 +17,7 @@ pipeline {
                 pip install -r requirements.txt
                 '''
             }
+        }
         stage('SCM') {
                 checkout scm
             }
