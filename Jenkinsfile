@@ -28,10 +28,10 @@ pipeline {
             steps {
                 script {
                     // 'sq1' should match the name of your SonarQube Installation in Jenkins Global Tool Configuration
-                    def scannerHome = tool 'sq1'
+                    def scannerHome = tool 'sonar-scanner'
                     
                     // Also pass the same installation name to withSonarQubeEnv
-                    withSonarQubeEnv('sq1') {
+                    withSonarQubeEnv('sonar-scanner') {
                         sh "${scannerHome}/bin/sonar-scanner"
                     }
                 }
