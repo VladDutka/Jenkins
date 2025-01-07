@@ -15,8 +15,8 @@ pipeline {
                 apt-get update
                 apt-get install -y python3-venv
                 python3 -m venv venv
-                source venv/bin/activate
-                bash -c "source venv/bin/activate && pip install -r requirements.txt"
+                . venv/bin/activate
+                pip install -r requirements.txt
                 '''
             }
         }
