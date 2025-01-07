@@ -4,9 +4,6 @@ pipeline {
             label 'docker-jdk-test'
             }
       }
-    triggers {
-        pollSCM '*/5 * * * *'
-    }
     stages {
         stage('Build') {
             steps {
@@ -19,6 +16,15 @@ pipeline {
                 cd myapp
                 pip install -r requirements.txt
                 '''
+            }
+        stage('SCM') {
+                checkout scm
+            }
+        stage('SonarQube Analysis') {
+                def scannerHome = tool 'sq1';
+                    withSonarQubeEnv() {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                }
             }
         }
         stage('Test') {
