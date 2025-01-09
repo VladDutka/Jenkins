@@ -1,7 +1,7 @@
 pipeline {
     agent {
         node {
-            label 'docker-jdk-test'
+            label 'docker-test'
         }
     }
     stages {
@@ -24,19 +24,32 @@ pipeline {
                 checkout scm
             }
         }
-        stage('SonarQube Analysis') {
+        stage('Sonar Scan') {
             steps {
-                script {
-                    // 'sq1' should match the name of your SonarQube Installation in Jenkins Global Tool Configuration
-                    def scannerHome = tool 'sonar-scanner'
-                    
-                    // Also pass the same installation name to withSonarQubeEnv
-                    withSonarQubeEnv('sonar-scanner') {
-                        sh "${scannerHome}/bin/sonar-scanner"
-                    }
-                }
+                sh """
+                    \${SCANNER_HOME}/bin/sonar-scanner \\
+                      -Dsonar.host.url=http://sonarqube-custom:9000 \\
+                      -Dsonar.login=squ_192e7a99bd3188ffcfdbf8647c113a5a478032b7 \\
+                      -Dsonar.projectName=hellworld-project \\
+                      -Dsonar.java.binaries=. \\
+                      -Dsonar.projectKey=helloworld-project \\
+                      -Dsonar.nodejs.executable=/usr/bin/node
+                """
             }
         }
+
+        stage('OWASP Scan') {
+            steps {
+                dependencyCheck additionalArguments: '''
+                  --nvdApiKey 4035da93-f4f9-485f-bcd7-cbb003d04105 \
+                  --scan ./ \
+                  -n
+                ''', odcInstallation: 'DP-check'
+
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
+
         stage('Test') {
             steps {
                 echo "Testing.."
