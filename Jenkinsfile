@@ -9,8 +9,18 @@ pipeline {
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
     }
-    
+
     stages {
+        stage('Debug Network') {
+            steps {
+                sh '''
+                echo "Testing hostname resolution and connectivity:"
+                ping -c 4 sonarqube-custom
+                curl -v http://sonarqube-custom:9000
+                '''
+            }
+        }
+
         stage('Build') {
             steps {
                 echo "Building.."
