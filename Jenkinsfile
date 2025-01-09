@@ -15,7 +15,7 @@ pipeline {
             steps {
                 sh '''
                 echo "Testing hostname resolution and connectivity:"
-                curl -v http://sonarqube-custom:9000
+                curl -v http://172.18.0.4:9000
                 '''
             }
         }
