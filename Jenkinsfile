@@ -3,7 +3,13 @@ pipeline {
         node {
             label 'docker-test'
         }
+
     }
+
+    environment {
+        SCANNER_HOME = tool 'sonar-scanner'
+    }
+    
     stages {
         stage('Build') {
             steps {
