@@ -20,7 +20,6 @@ pipeline {
         }
         stage('SCM') {
             steps {
-                // Always wrap checkout in steps {}
                 checkout scm
             }
         }
@@ -45,7 +44,6 @@ pipeline {
                   --scan ./ \
                   -n
                 ''', odcInstallation: 'DP-check'
-
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
